@@ -100,6 +100,10 @@ object SparkUtils extends Logging {
     UserGroupInformation.getCurrentUser.getUserName
   }
 
+  def ugi(): UserGroupInformation = {
+    UserGroupInformation.getCurrentUser
+  }
+
   /**
     * This is based on the logic how Spark handles table name (borrowed from Apache Spark v2.4.0).
     * https://github.com/apache/spark/blob/0a4c03f7d084f1d2aa48673b99f3b9496893ce8d/sql/catalyst/src/main/scala/org/apache/spark/sql/catalyst/catalog/SessionCatalog.scala#L120-L125
