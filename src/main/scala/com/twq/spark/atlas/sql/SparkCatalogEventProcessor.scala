@@ -4,7 +4,7 @@ import com.twq.spark.atlas.types.{AtlasEntityUtils, external}
 import com.twq.spark.atlas.utils.SparkUtils
 import com.twq.spark.atlas.{AbstractEventProcessor, AtlasClient, AtlasClientConf, AtlasEntityReadHelper}
 import org.apache.spark.sql.catalyst.analysis.NoSuchDatabaseException
-import org.apache.spark.sql.catalyst.catalog.{CatalogDatabase, CreateDatabasePreEvent, CreateTableEvent, CreateTablePreEvent, DropDatabaseEvent, DropDatabasePreEvent, ExternalCatalogEvent}
+import org.apache.spark.sql.catalyst.catalog.{CatalogDatabase, CreateDatabaseEvent, CreateDatabasePreEvent, CreateTableEvent, CreateTablePreEvent, DropDatabaseEvent, DropDatabasePreEvent, ExternalCatalogEvent}
 
 import scala.collection.mutable
 
@@ -25,7 +25,7 @@ class SparkCatalogEventProcessor(val atlasClient: AtlasClient,
     e match {
       case CreateDatabasePreEvent(_) => // No-op
 
-      case CreateDatabasePreEvent(db) =>
+      case CreateDatabaseEvent(db) =>
         val dbDefinition = SparkUtils.getExternalCatalog().getDatabase(db)
         val entity = sparkDbToEntity(dbDefinition)
         atlasClient.createEntitiesWithDependencies(entity)

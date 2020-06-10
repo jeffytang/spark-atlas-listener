@@ -202,4 +202,5 @@ object SparkUtils extends Logging {
 
       case None => currUser()
     }
+  }
 }
