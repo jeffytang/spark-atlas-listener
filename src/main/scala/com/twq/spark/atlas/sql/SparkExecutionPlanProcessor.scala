@@ -2,7 +2,7 @@ package com.twq.spark.atlas.sql
 
 import java.util.UUID
 
-import com.twq.spark.atlas.utils.Logging
+import com.twq.spark.atlas.utils.{AtlasUtils, Logging}
 import com.twq.spark.atlas.{AbstractEventProcessor, AtlasClient, AtlasClientConf, AtlasEntityCreationRequestHelper}
 import org.apache.spark.sql.execution.command.{DataWritingCommandExec, ExecutedCommandExec, LoadDataCommand}
 import org.apache.spark.sql.execution.datasources.v2.WriteToDataSourceV2Exec
@@ -17,6 +17,11 @@ case class QueryDetail(
                         sink: Option[SinkProgress] = None,
                         queryId: Option[UUID] = None)
 
+object QueryDetail {
+  def fromQueryExecutionListener(qe: QueryExecution, durationNs: Long): QueryDetail = {
+    QueryDetail(qe, AtlasUtils.issueExecutionId(), Option(SQLQuery.get()))
+  }
+}
 
 class SparkExecutionPlanProcessor(
                                    private[atlas] val atlasClient: AtlasClient,

@@ -8,8 +8,8 @@ import org.apache.spark.sql.catalyst.catalog.{CatalogDatabase, CreateDatabasePre
 
 import scala.collection.mutable
 
-class SparkCatalogEventProcessor(val conf: AtlasClientConf,
-                                  val atlasClient: AtlasClient)
+class SparkCatalogEventProcessor(val atlasClient: AtlasClient,
+                                 val conf: AtlasClientConf)
   extends AbstractEventProcessor[ExternalCatalogEvent] with AtlasEntityUtils {
 
   private val cachedObject = new mutable.WeakHashMap[String, Object]
