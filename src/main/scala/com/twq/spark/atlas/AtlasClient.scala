@@ -70,3 +70,29 @@ trait AtlasClient extends Logging {
 
   protected def doDeleteEntityWithUniqueAttr(entityType: String, attribute: String): Unit
 }
+
+object AtlasClient {
+  @volatile private var client: AtlasClient = null;
+
+  def atalsClient(conf: AtlasClientConf): AtlasClient = {
+    if (client == null) {
+      AtlasClient.synchronized {
+        if (client == null) {
+          conf.get(AtlasClientConf.CLIENT_TYPE).trim match {
+            case "rest" =>
+              client = new RestAtlasClient(conf)
+            case "kafka" =>
+              client = new KafkaAtlasClient(conf)
+            case e =>
+              client = Class.forName(e)
+              .getConstructor(classOf[AtlasClientConf])
+              .newInstance(conf)
+              .asInstanceOf[AtlasClient]
+          }
+        }
+      }
+    }
+
+    client
+  }
+}
